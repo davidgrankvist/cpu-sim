@@ -1,5 +1,6 @@
 using CpuSim.Lib.Simulation;
 using CpuSim.Lib.Simulation.Commands;
+using CpuSim.Lib.Test.Framework;
 
 namespace CpuSim.Lib.Test.InterpreterTests;
 
@@ -18,21 +19,13 @@ public class InterpreterTest
 
     private void TestProgram(string program, IEnumerable<ICpuCommand> commands)
     {
-        RunProgram(program);
+        interpreter.Run(program);
         AssertExtensions.SequenceEqual(commands, executorSpy.Commands);
-    }
-
-    private void RunProgram(string program)
-    {
-        using (var input = new StringReader(program))
-        {
-            interpreter.Run(input);
-        }
     }
 
     private void TestCrashingProgram(string program, IEnumerable<ICpuCommand> commands)
     {
-        AssertExtensions.Throws(() => RunProgram(program));
+        AssertExtensions.Throws(() => interpreter.Run(program));
         AssertExtensions.SequenceEqual(commands, executorSpy.Commands);
     }
 

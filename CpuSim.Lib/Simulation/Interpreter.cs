@@ -105,15 +105,15 @@ namespace CpuSim.Lib.Simulation
 
         private static string[] Tokenize(string line)
         {
+            var trimmedLine = line.Trim();
             string[] tokens;
-            if (line.StartsWith("#"))
+            if (trimmedLine.StartsWith("#"))
             {
                 tokens = [];
             }
             else
             {
-                tokens = line
-                    .Trim()
+                tokens = trimmedLine
                     .Split()
                     .Where(x => !string.IsNullOrEmpty(x))
                     .ToArray();

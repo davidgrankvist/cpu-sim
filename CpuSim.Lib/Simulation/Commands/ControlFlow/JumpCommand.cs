@@ -23,7 +23,7 @@
         public bool ShouldJump(CpuState cpuState)
         {
             var cmp = cpuState.GetCompareResult();
-            return cmp.HasFlag(compareResult);
+            return compareResult.HasFlag(cmp);
         }
     }
 }
