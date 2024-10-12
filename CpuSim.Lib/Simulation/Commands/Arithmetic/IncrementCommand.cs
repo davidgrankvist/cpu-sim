@@ -11,7 +11,8 @@
 
         public void Execute(CpuState cpuState)
         {
-            cpuState.Increment(register);
+            var v = cpuState.GetRegister(register);
+            cpuState.SetRegister(register, v - 1);
         }
     }
 }

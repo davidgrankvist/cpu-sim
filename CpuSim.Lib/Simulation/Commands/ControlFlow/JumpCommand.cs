@@ -13,7 +13,14 @@
 
         public void Execute(CpuState cpuState)
         {
-            cpuState.Jump(marker, compareResult);
+            var pc = cpuState.GetProgramCounter();
+            var cmp = cpuState.GetCompareResult();
+
+            if (cmp.HasFlag(compareResult))
+            {
+                var addr = cpuState.GetMarkAddress(marker);
+                cpuState.SetProgramCounter(addr);
+            }
         }
     }
 }

@@ -14,7 +14,24 @@
 
         public void Execute(CpuState cpuState)
         {
-            cpuState.Compare(register1, register2);
+            var v1 = cpuState.GetRegister(register1);
+            var v2 = cpuState.GetRegister(register2);
+
+            CompareResult result;
+            if (v1 == v2)
+            {
+                result = CompareResult.Equal;
+            }
+            else if (v1 < v2)
+            {
+                result = CompareResult.LessThan;
+            }
+            else
+            {
+                result = CompareResult.GreaterThan;
+            }
+
+            cpuState.SetCompareResult(result);
         }
     }
 }

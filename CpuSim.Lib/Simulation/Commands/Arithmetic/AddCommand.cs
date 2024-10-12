@@ -14,7 +14,9 @@
 
         public void Execute(CpuState cpuState)
         {
-            cpuState.Add(register1, register2);
+            var v1 = cpuState.GetRegister(register1);
+            var v2 = cpuState.GetRegister(register2);
+            cpuState.SetRegister(register1, v1 + v2);
         }
     }
 }

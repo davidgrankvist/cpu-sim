@@ -13,7 +13,8 @@
         }
         public void Execute(CpuState cpuState)
         {
-            cpuState.Store(register, address);
+            var v = cpuState.GetRegister(register);
+            cpuState.SetMemory(address, v);
         }
     }
 }

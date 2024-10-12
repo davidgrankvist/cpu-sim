@@ -14,7 +14,7 @@
 
         public void Execute(CpuState cpuState)
         {
-            cpuState.Load(register, value);
+            cpuState.SetRegister(register, value);
         }
     }
 }

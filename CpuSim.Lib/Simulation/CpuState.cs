@@ -4,32 +4,71 @@ namespace CpuSim.Lib.Simulation
 {
     public class CpuState
     {
-        public void Load(int register, int value)
+        private readonly int[] registers;
+
+        private readonly Dictionary<int, int> memory;
+
+        private CompareResult compareResult;
+
+        private int programCounter;
+
+        private readonly Dictionary<string, int> markToAddress;
+
+        public CpuState(int numRegisters)
         {
+            registers = new int[numRegisters];
+            memory = [];
+            markToAddress = [];
         }
 
-        public void Store(int register, int address)
+        public void SetRegister(int register, int value)
         {
+            registers[register] = value;
         }
 
-        public void Add(int register1, int register2)
+        public int GetRegister(int register)
         {
+            return registers[register];
         }
 
-        public void Increment(int register)
+        public void SetMemory(int address, int value)
         {
+            memory[address] = value;
         }
 
-        public void Decrement(int register)
+        public int GetMemory(int address)
         {
+            return memory[address];
         }
 
-        public void Compare(int register1, int register2)
+        public void SetCompareResult(CompareResult compareResult)
         {
+            this.compareResult = compareResult;
         }
 
-        public void Jump(string marker, CompareResult compareResult)
+        public CompareResult GetCompareResult()
         {
+            return compareResult;
+        }
+
+        public void SetProgramCounter(int value)
+        {
+            programCounter = value;
+        }
+
+        public int GetProgramCounter()
+        {
+            return programCounter;
+        }
+
+        public void SetMarkAddress(string mark, int address)
+        {
+            markToAddress[mark] = address;
+        }
+
+        public int GetMarkAddress(string mark)
+        {
+            return markToAddress[mark];
         }
     }
 }

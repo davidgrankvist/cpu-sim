@@ -6,7 +6,7 @@ namespace CpuSim.App
     {
         public static void Main(string[] args)
         {
-            var cpuState = new CpuState();
+            var cpuState = new CpuState(10);
             var executor = new Executor(cpuState);
             var interpreter = new Interpreter(executor, true);
 
