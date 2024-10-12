@@ -92,4 +92,11 @@ public class InterpreterTest
         var (program, commands) = InterpreterTestDataHelper.CreateFullyInvalidInstructionProgram();
         TestCrashingProgram(program, []);
     }
+
+    [TestMethod]
+    public void ShouldSkipComments()
+    {
+        var (program, commands) = InterpreterTestDataHelper.CreateProgramWithCommentedOutCode();
+        TestProgram(program, commands);
+    }
 }

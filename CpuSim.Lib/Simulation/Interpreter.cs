@@ -105,11 +105,20 @@ namespace CpuSim.Lib.Simulation
 
         private static string[] Tokenize(string line)
         {
-            return line
-                .Trim()
-                .Split()
-                .Where(x => !string.IsNullOrEmpty(x))
-                .ToArray();
+            string[] tokens;
+            if (line.StartsWith("#"))
+            {
+                tokens = [];
+            }
+            else
+            {
+                tokens = line
+                    .Trim()
+                    .Split()
+                    .Where(x => !string.IsNullOrEmpty(x))
+                    .ToArray();
+            }
+            return tokens;
         }
 
         private bool TryParse(string[] tokens, out ICpuCommand command)

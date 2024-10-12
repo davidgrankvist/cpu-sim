@@ -27,6 +27,7 @@ jg mark
 jge mark
 mark:
 mixedCaseMarkWithSomeNumbers12151:
+# this is a comment
 ";
 
             var commands = new List<ICpuCommand>()
@@ -125,6 +126,21 @@ ld r1 INVALID
             var program = @"
 ld r1 1337
 ld r1 1337 1337
+";
+            var commands = new List<ICpuCommand>()
+            {
+                new LoadCommand(1, 1337),
+            };
+            return (program, commands);
+        }
+
+        public static (string Program, IEnumerable<ICpuCommand> Commands) CreateProgramWithCommentedOutCode()
+        {
+            var program = @"
+# here is a comment before the code
+ld r1 1337
+# below is some commented out code
+# ld r1 1337
 ";
             var commands = new List<ICpuCommand>()
             {
