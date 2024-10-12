@@ -8,7 +8,7 @@ namespace CpuSim.App
         {
             var cpuState = new CpuState();
             var executor = new Executor(cpuState);
-            var interpreter = new Interpreter(executor);
+            var interpreter = new Interpreter(executor, true);
 
             using (var stdin = Console.In)
             {

@@ -8,10 +8,16 @@ namespace CpuSim.Lib.Simulation
     public class Interpreter
     {
         private readonly IExecutor executor;
+        private readonly bool interactiveMode;
 
-        public Interpreter(IExecutor executor)
+        public Interpreter(IExecutor executor, bool interactiveMode)
         {
             this.executor = executor;
+            this.interactiveMode = interactiveMode;
+        }
+
+        public Interpreter(IExecutor executor) : this(executor, false)
+        {
         }
 
         public void Run(TextReader input)
@@ -19,16 +25,35 @@ namespace CpuSim.Lib.Simulation
             string line;
             while ((line = input.ReadLine()) != null)
             {
-                var tokens = Tokenize(line);
-                if (tokens.Length == 0)
+                try
                 {
-                    continue;
+                    ParseLine(line);
                 }
+                catch (Exception e)
+                {
+                    if (interactiveMode)
+                    {
+                        Console.Error.WriteLine(e);
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+            }
+        }
 
-                if (TryParse(tokens, out var command))
-                {
-                    executor.Execute(command);
-                }
+        private void ParseLine(string line)
+        {
+            var tokens = Tokenize(line);
+            if (tokens.Length == 0)
+            {
+                return;
+            }
+
+            if (TryParse(tokens, out var command))
+            {
+                executor.Execute(command);
             }
         }
 
