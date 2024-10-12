@@ -58,7 +58,7 @@ namespace CpuSim.Lib.Simulation
             var command = commands[pc];
             command.Execute(cpuState);
 
-            if (command is not JumpCommand jumpCommand || !jumpCommand.ShouldJump(cpuState))
+            if (command is not JumpCommand && command is not ReturnCommand && command is not CallCommand)
             {
                 cpuState.SetProgramCounter(pc + 1);
             }

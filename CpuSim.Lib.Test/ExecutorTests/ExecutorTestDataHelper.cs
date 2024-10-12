@@ -83,5 +83,38 @@ namespace CpuSim.Lib.Test.ExecutorTests
 
             return (program, toRepeat, expectedRepetitions);
         }
+
+        public static (IEnumerable<ICpuCommand> Program, CommandSpy ToSkip, int ResultRegister, int ExpectedResult) CreateCallSubroutineProgram()
+        {
+            var toSkip = new CommandSpy();
+            var resultRegister = 0;
+            var expectedResult = 200;
+
+            var r1 = resultRegister;
+            var r2 = 1;
+            var r3 = 2;
+            var r4 = 3;
+            var program = new List<ICpuCommand>()
+            {
+                new MarkCommand("main"),
+                new LoadCommand(r1, 10),
+                new LoadCommand(r2, 20),
+                new PushCommand(r1),
+                new PushCommand(r2),
+                new CallCommand("multiplyRoutine"),
+                new PopCommand(r1),
+                new JumpCommand("end", CompareResult.Any),
+                toSkip,
+                new MarkCommand("multiplyRoutine"),
+                new PopCommand(r3),
+                new PopCommand(r4),
+                new MultiplyCommand(r3, r4),
+                new PushCommand(r3),
+                new ReturnCommand(),
+                new MarkCommand("end")
+            };
+
+            return (program, toSkip,  resultRegister, expectedResult);
+        }
     }
 }

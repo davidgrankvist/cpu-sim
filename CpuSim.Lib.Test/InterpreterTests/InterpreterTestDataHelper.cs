@@ -28,6 +28,10 @@ jge mark
 mark:
 mixedCaseMarkWithSomeNumbers12151:
 # this is a comment
+psh r1
+pop r1
+ret
+call mark
 ";
 
             var commands = new List<ICpuCommand>()
@@ -50,6 +54,10 @@ mixedCaseMarkWithSomeNumbers12151:
                 new JumpCommand("mark", CompareResult.GreaterThanOrEqual),
                 new MarkCommand("mark"),
                 new MarkCommand("mixedCaseMarkWithSomeNumbers12151"),
+                new PushCommand(1),
+                new PopCommand(1),
+                new ReturnCommand(),
+                new CallCommand("mark"),
             };
 
             return (program, commands);

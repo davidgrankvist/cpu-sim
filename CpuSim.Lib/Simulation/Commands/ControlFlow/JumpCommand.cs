@@ -18,6 +18,11 @@
                 var addr = cpuState.GetMarkAddress(marker);
                 cpuState.SetProgramCounter(addr);
             }
+            else
+            {
+                var pc = cpuState.GetProgramCounter();
+                cpuState.SetProgramCounter(pc + 1);
+            }
         }
 
         public bool ShouldJump(CpuState cpuState)

@@ -32,5 +32,41 @@ namespace CpuSim.Lib.Test.IntegrationTests
             Assert.AreEqual(setup.FirstResult, cpuState.GetMemory(setup.FirstResultAddress));
             Assert.AreEqual(setup.SecondResult, cpuState.GetMemory(setup.SecondResultAddress));
         }
+
+        [TestMethod]
+        public void ShouldRunCallAndReturnProgram()
+        {
+            interpreter = new Interpreter(executor, InterpreterExecutionMode.NonInteractivePreload);
+            var setup = IntegrationTestDataHelper.CreateCallAndReturnProgram();
+
+            interpreter.Run(setup.Program);
+
+            Assert.AreEqual(1, cpuState.GetMemory(setup.DidFinishAddress));
+            Assert.AreEqual(setup.ExpectedResult, cpuState.GetRegister(setup.ResultRegister));
+        }
+
+        [TestMethod]
+        public void ShouldRunCallAndRecurseCountdownProgram()
+        {
+            interpreter = new Interpreter(executor, InterpreterExecutionMode.NonInteractivePreload);
+            var setup = IntegrationTestDataHelper.CreateCallAndRecurseCountdownProgram();
+
+            interpreter.Run(setup.Program);
+
+            Assert.AreEqual(1, cpuState.GetMemory(setup.DidFinishAddress));
+            Assert.AreEqual(setup.ExpectedResult, cpuState.GetRegister(setup.ResultRegister));
+        }
+
+        [TestMethod]
+        public void ShouldRunFibonacciProgram()
+        {
+            interpreter = new Interpreter(executor, InterpreterExecutionMode.NonInteractivePreload);
+            var setup = IntegrationTestDataHelper.CreateFibonacciProgram();
+
+            interpreter.Run(setup.Program);
+
+            Assert.AreEqual(1, cpuState.GetMemory(setup.DidFinishAddress));
+            Assert.AreEqual(setup.ExpectedResult, cpuState.GetRegister(setup.ResultRegister));
+        }
     }
 }

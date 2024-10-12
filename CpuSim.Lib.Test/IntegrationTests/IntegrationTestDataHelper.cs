@@ -1,4 +1,4 @@
-﻿namespace CpuSim.Lib.Test.IntegrationTests
+﻿ namespace CpuSim.Lib.Test.IntegrationTests
 {
     internal static class IntegrationTestDataHelper
     {
@@ -16,7 +16,7 @@ main:
     ld r0 7
     ld r1 0
     jmp doMath
-# use extra marks as the call stack is not implemented yet
+# use extra marks instead of call stack
 # jump to right before we store the result
 continuePoint1:
     st r0 1337
@@ -72,6 +72,148 @@ end:
         private static int DoMath(int x)
         {
             return 5 * 2 + x / 7 - 39;
+        }
+
+        public static (string Program, int ResultRegister, int ExpectedResult, int DidFinishAddress) CreateCallAndReturnProgram()
+        {
+            var program = @"
+main:
+    ld r0 10
+    psh r0
+    ld r0 2
+    psh r0
+    call addSubroutine
+    pop r0
+    jmp end
+
+addSubroutine:
+    pop r0
+    pop r1
+    add r0 r1
+    psh r0
+    ret
+
+end:
+    ld r1 1
+    st r1 1337
+";
+            var resultRegister = 0;
+            var expectedResult = 12;
+            var didFinishAddress = 1337;
+
+            return (program, resultRegister, expectedResult, didFinishAddress);
+        }
+
+        public static (string Program, int ResultRegister, int ExpectedResult, int DidFinishAddress) CreateCallAndRecurseCountdownProgram()
+        {
+            var program = @"
+main:
+    ld r0 10
+    psh r0
+    call countdown
+    pop r0
+    jmp end
+
+countdown:
+    pop r0
+    ld r1 0
+    cmp r0 r1
+    je countdownDone
+    dec r0
+    psh r0
+    call countdown
+countdownDone:
+    psh r0
+    ret
+
+end:
+    ld r1 1
+    st r1 1337
+";
+            var resultRegister = 0;
+            var expectedResult = 0;
+            var didFinishAddress = 1337;
+
+            return (program, resultRegister, expectedResult, didFinishAddress);
+        }
+        public static (string Program, int ResultRegister, int ExpectedResult, int DidFinishAddress) CreateFibonacciProgram()
+        {
+            var program = @"
+main:
+    ld r0 6
+    psh r0
+    call fib
+    pop r0
+    jmp end
+
+fib:
+    ld r1 1
+    pop r0
+    cmp r0 r1
+    jg fibRecurse
+fibDone:
+    psh r0
+    ret
+fibRecurse:
+    # ---- fib(n - 2) ----
+    # load n into r1
+    psh r0
+    pop r1
+
+    # n - 2
+    dec r1
+    dec r1
+
+    # backup n
+    psh r0
+
+    # invoke fib(n - 2), load result into r1
+    psh r1
+    call fib
+    pop r1
+
+    # ---- fib(n - 1) ----
+    # restore n
+    pop r0
+
+    # n - 1
+    dec r0
+
+    # backup fib(n - 2) result
+    psh r1
+
+    # invoke fib(n - 1), load result into r0
+    psh r0
+    call fib
+    pop r0
+
+    # restore fib(n - 2) result
+    pop r1
+
+    # ---- Result ----
+    # add and return result
+    add r0 r1
+    psh r0
+    ret
+
+end:
+    ld r1 1
+    st r1 1337
+";
+            var resultRegister = 0;
+            var expectedResult = Fib(6);
+            var didFinishAddress = 1337;
+
+            return (program,  resultRegister, expectedResult, didFinishAddress);
+        }
+
+        private static int Fib(int n)
+        {
+            if (n <= 1)
+            {
+                return n;
+            }
+            return Fib(n - 2) + Fib(n - 1);
         }
     }
 }

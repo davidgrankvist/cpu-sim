@@ -201,7 +201,7 @@ namespace CpuSim.Lib.Test
 
             cmd.Execute(cpuState);
 
-            Assert.AreEqual(pc, cpuState.GetProgramCounter());
+            Assert.AreEqual(pc + 1, cpuState.GetProgramCounter());
         }
 
         [TestMethod]
@@ -215,6 +215,64 @@ namespace CpuSim.Lib.Test
             cmd.Execute(cpuState);
 
             Assert.AreEqual(pc, cpuState.GetMarkAddress(mark));
+        }
+
+        [TestMethod]
+        public void ShouldPushRegisterValue()
+        {
+            var r = 0;
+            var v = 5;
+            var cmd = new PushCommand(r);
+            cpuState.SetRegister(r, v);
+
+            cmd.Execute(cpuState);
+            var popped = cpuState.Pop();
+
+            Assert.AreEqual(v, popped);
+        }
+
+        [TestMethod]
+        public void ShouldPopIntoRegister()
+        {
+            var r = 0;
+            var v = 5;
+            var cmd = new PopCommand(r);
+            cpuState.Push(v);
+
+            cmd.Execute(cpuState);
+
+            Assert.AreEqual(v, cpuState.GetRegister(r));
+        }
+
+        [TestMethod]
+        public void ShouldCallSubroutineAndReturnToCaller()
+        {
+            var pc = 1;
+            var mark = "marker";
+            var markAddress = 1337;
+            var cmd = new CallCommand(mark);
+            cpuState.SetProgramCounter(pc);
+            cpuState.SetMarkAddress(mark, markAddress);
+
+            cmd.Execute(cpuState);
+            var poppedAddress = cpuState.PopReturn();
+
+            Assert.AreEqual(pc + 1, poppedAddress);
+            Assert.AreEqual(markAddress, cpuState.GetProgramCounter());
+        }
+
+        [TestMethod]
+        public void ShouldReturnToAddress()
+        {
+            var pcRet = 1;
+            var pc = 1337;
+            var cmd = new ReturnCommand();
+            cpuState.SetProgramCounter(pc);
+            cpuState.PushReturn(pcRet);
+
+            cmd.Execute(cpuState);
+
+            Assert.AreEqual(pcRet, cpuState.GetProgramCounter());
         }
     }
 }

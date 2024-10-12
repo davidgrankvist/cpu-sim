@@ -11,7 +11,8 @@ namespace CpuSim.Lib.Simulation
         private readonly IExecutor executor;
         private readonly InterpreterExecutionMode executionMode;
 
-        private static readonly Regex markRegex = new Regex("[a-zA-Z0-9]+:");
+        private static readonly Regex markWithColonRegex = new Regex("[a-zA-Z0-9]+:");
+        private static readonly Regex markRegex = new Regex("[a-zA-Z0-9]+");
 
 
         public Interpreter(IExecutor executor, InterpreterExecutionMode executionMode)
@@ -148,13 +149,15 @@ namespace CpuSim.Lib.Simulation
         private ICpuCommand ParseZeroArgCommand(string instruction)
         {
             ICpuCommand command = null;
-            if (markRegex.IsMatch(instruction))
+            switch (instruction)
             {
-                command = new MarkCommand(instruction.Substring(0, instruction.Length - 1));
-            }
-            else
-            {
-                throw new InvalidOperationException($"Invalid zero-argument command: {instruction}");
+                case "ret":
+                    command = new ReturnCommand();
+                    break;
+                default:
+                    var mark = ToMark(instruction, true);
+                    command = new MarkCommand(mark);
+                    break;
             }
 
             return command;
@@ -192,6 +195,15 @@ namespace CpuSim.Lib.Simulation
                     break;
                 case "jge":
                     command = new JumpCommand(arg, CompareResult.GreaterThanOrEqual);
+                    break;
+                case "psh":
+                    command = new PushCommand(ToRegisterIndex(arg));
+                    break;
+                case "pop":
+                    command = new PopCommand(ToRegisterIndex(arg));
+                    break;
+                case "call":
+                    command = new CallCommand(ToMark(arg));
                     break;
             }
 
@@ -251,6 +263,20 @@ namespace CpuSim.Lib.Simulation
                 result = int.Parse(str, NumberStyles.Integer);
             }
             return result;
+        }
+
+        private static string ToMark(string str, bool includeColon = false)
+        {
+            var re = includeColon ? markWithColonRegex : markRegex;
+            var le = includeColon ? str.Length - 1 : str.Length;
+            if (re.IsMatch(str))
+            {
+                return str.Substring(0, le);
+            }
+            else
+            {
+                throw new InvalidOperationException($"Invalid zero-argument command: {str}");
+            }
         }
     }
 }

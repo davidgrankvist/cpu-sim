@@ -14,12 +14,18 @@ namespace CpuSim.Lib.Simulation
 
         private readonly Dictionary<string, int> markToAddress;
 
+        private readonly Stack<int> stack;
+
+        private readonly Stack<int> returnStack;
+
         public CpuState(int numRegisters)
         {
             registers = new int[numRegisters];
             memory = [];
             markToAddress = [];
             compareResult = CompareResult.Any;
+            stack = [];
+            returnStack = [];
         }
 
         public void SetRegister(int register, int value)
@@ -70,6 +76,26 @@ namespace CpuSim.Lib.Simulation
         public int GetMarkAddress(string mark)
         {
             return markToAddress[mark];
+        }
+
+        public void Push(int value)
+        {
+            stack.Push(value);
+        }
+
+        public int Pop()
+        {
+            return stack.Pop();
+        }
+
+        public void PushReturn(int address)
+        {
+            returnStack.Push(address);
+        }
+
+        public int PopReturn()
+        {
+            return returnStack.Pop();
         }
     }
 }

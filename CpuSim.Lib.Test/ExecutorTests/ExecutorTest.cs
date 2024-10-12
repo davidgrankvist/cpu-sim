@@ -68,5 +68,20 @@ namespace CpuSim.Lib.Test.ExecutorTests
 
             Assert.AreEqual(expectedRepetitions, toRepeat.NumExecutions);
         }
+
+        [TestMethod]
+        public void ShouldCallSubroutineAndReturn()
+        {
+            numRegisters = 4;
+            cpuState = new CpuState(numRegisters);
+            executor = new Executor(cpuState);
+            var (program, toSkip, resultRegister, expectedResult) = ExecutorTestDataHelper.CreateCallSubroutineProgram();
+
+            executor.Load(program);
+            executor.ExecuteAll();
+
+            Assert.IsTrue(!toSkip.DidExecute);
+            Assert.AreEqual(expectedResult, cpuState.GetRegister(resultRegister));
+        }
     }
 }
