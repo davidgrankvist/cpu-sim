@@ -12,7 +12,7 @@
         public void Execute(CpuState cpuState)
         {
             var v = cpuState.GetRegister(register);
-            cpuState.SetRegister(register, v - 1);
+            cpuState.SetRegister(register, v + 1);
         }
     }
 }
