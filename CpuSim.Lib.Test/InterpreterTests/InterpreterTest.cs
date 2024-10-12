@@ -84,4 +84,12 @@ public class InterpreterTest
         var (program, commands) = InterpreterTestDataHelper.CreateInvalidValueInstructionProgram();
         TestCrashingProgram(program, commands);
     }
+
+    [TestMethod]
+    public void ShouldCrashBeforeExecutionInPreloadMode()
+    {
+        interpreter = new Interpreter(executorSpy, InterpreterExecutionMode.NonInteractivePreload);
+        var (program, commands) = InterpreterTestDataHelper.CreateFullyInvalidInstructionProgram();
+        TestCrashingProgram(program, []);
+    }
 }

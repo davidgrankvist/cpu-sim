@@ -14,18 +14,13 @@ namespace CpuSim.Lib.Simulation
             commands = [];
         }
 
-        /// <summary>
-        /// Execute a command and any additional commands if a backwards jump is made.
-        /// </summary>
+
         public void Execute(ICpuCommand command)
         {
             commands.Add(command);
             ExecuteAll();
         }
 
-        /// <summary>
-        /// Preload so that marks can be registered.
-        /// </summary>
         public void Load(IEnumerable<ICpuCommand> commands)
         {
             var commandsList = commands.ToList();
@@ -43,9 +38,6 @@ namespace CpuSim.Lib.Simulation
             }
         }
 
-        /// <summary>
-        /// Execute loaded commands until the program counter reaches the end of the program.
-        /// </summary>
         public void ExecuteAll()
         {
             var hasNext = true;

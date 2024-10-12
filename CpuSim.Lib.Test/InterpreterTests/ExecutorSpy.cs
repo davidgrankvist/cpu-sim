@@ -5,10 +5,20 @@ namespace CpuSim.Lib.Test.InterpreterTests;
 
 public class ExecutorSpy : IExecutor
 {
-    public List<ICpuCommand> Commands { get; } = [];
+    private List<ICpuCommand> allCommands = [];
+    public List<ICpuCommand> Commands { get; private set; } = [];
 
     public void Execute(ICpuCommand command)
     {
         Commands.Add(command);
+    }
+
+    public void ExecuteAll()
+    {
+    }
+
+    public void Load(IEnumerable<ICpuCommand> commands)
+    {
+        allCommands = commands.ToList();
     }
 }

@@ -9,56 +9,98 @@ namespace CpuSim.Lib.Simulation
     public class Interpreter
     {
         private readonly IExecutor executor;
-        private readonly bool interactiveMode;
+        private readonly InterpreterExecutionMode executionMode;
 
         private static readonly Regex markRegex = new Regex("[a-zA-Z0-9]+:");
 
 
-        public Interpreter(IExecutor executor, bool interactiveMode)
+        public Interpreter(IExecutor executor, InterpreterExecutionMode executionMode)
         {
             this.executor = executor;
-            this.interactiveMode = interactiveMode;
+            this.executionMode = executionMode;
         }
 
-        public Interpreter(IExecutor executor) : this(executor, false)
+        public Interpreter(IExecutor executor) : this(executor, InterpreterExecutionMode.NonInteractiveImmediate)
         {
         }
 
         public void Run(TextReader input)
+        {
+            switch (executionMode)
+            {
+                case InterpreterExecutionMode.Interactive:
+                    RunInteractive(input);
+                    break;
+                case InterpreterExecutionMode.NonInteractiveImmediate:
+                    RunNonInteractiveImmediate(input);
+                    break;
+                case InterpreterExecutionMode.NonInteractivePreload:
+                    RunNonInteractiveWithPreload(input);
+                    break;
+                default:
+                    throw new InvalidOperationException("Unsupported execution mode");
+            }
+        }
+
+        public void RunInteractive(TextReader input)
         {
             string line;
             while ((line = input.ReadLine()) != null)
             {
                 try
                 {
-                    ParseLine(line);
+                    ParseAndExecute(line);
                 }
                 catch (Exception e)
                 {
-                    if (interactiveMode)
-                    {
-                        Console.Error.WriteLine(e);
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    Console.Error.WriteLine(e);
                 }
             }
         }
 
-        private void ParseLine(string line)
+        public void RunNonInteractiveWithPreload(TextReader input)
         {
-            var tokens = Tokenize(line);
-            if (tokens.Length == 0)
+            string line;
+            List<ICpuCommand> commands = [];
+            while ((line = input.ReadLine()) != null)
             {
-                return;
+                if (TryParseLine(line, out var command))
+                {
+                    commands.Add(command);
+                };
             }
 
-            if (TryParse(tokens, out var command))
+            executor.Load(commands);
+            executor.ExecuteAll();
+        }
+
+        public void RunNonInteractiveImmediate(TextReader input)
+        {
+            string line;
+            while ((line = input.ReadLine()) != null)
+            {
+                ParseAndExecute(line);
+            }
+        }
+
+        private void ParseAndExecute(string line)
+        {
+            if (TryParseLine(line, out var command))
             {
                 executor.Execute(command);
             }
+        }
+
+        private bool TryParseLine(string line, out ICpuCommand command)
+        {
+            command = null;
+            var tokens = Tokenize(line);
+            if (tokens.Length > 0 && TryParse(tokens, out var cmd))
+            {
+                command = cmd;
+            }
+
+            return command != null;
         }
 
         private static string[] Tokenize(string line)
