@@ -2,6 +2,7 @@
 using CpuSim.Lib.Simulation.Commands.Arithmetic;
 using CpuSim.Lib.Simulation.Commands.ControlFlow;
 using System.Globalization;
+using System.Text.RegularExpressions;
 
 namespace CpuSim.Lib.Simulation
 {
@@ -9,6 +10,9 @@ namespace CpuSim.Lib.Simulation
     {
         private readonly IExecutor executor;
         private readonly bool interactiveMode;
+
+        private static readonly Regex markRegex = new Regex("[a-zA-Z0-9]+:");
+
 
         public Interpreter(IExecutor executor, bool interactiveMode)
         {
@@ -78,6 +82,10 @@ namespace CpuSim.Lib.Simulation
             {
                 command = ParseOneArgCommand(tokens[0], tokens[1]);
             }
+            else if (tokens.Length == 1)
+            {
+                command = ParseZeroArgCommand(tokens[0]);
+            }
             else
             {
                 throw new InvalidOperationException($"Unknown command {string.Join(' ')}");
@@ -85,6 +93,22 @@ namespace CpuSim.Lib.Simulation
 
             return command != null;
         }
+
+        private ICpuCommand ParseZeroArgCommand(string instruction)
+        {
+            ICpuCommand command = null;
+            if (markRegex.IsMatch(instruction))
+            {
+                command = new MarkCommand(instruction.Substring(0, instruction.Length - 1));
+            }
+            else
+            {
+                throw new InvalidOperationException($"Invalid zero-argument command: {instruction}");
+            }
+
+            return command;
+        }
+
 
         private ICpuCommand ParseOneArgCommand(string instruction, string arg)
         {

@@ -203,5 +203,18 @@ namespace CpuSim.Lib.Test
 
             Assert.AreEqual(pc, cpuState.GetProgramCounter());
         }
+
+        [TestMethod]
+        public void ShouldMarkAtProgramCounter()
+        {
+            var pc = 1;
+            var mark = "marker";
+            var cmd = new MarkCommand(mark);
+            cpuState.SetProgramCounter(pc);
+
+            cmd.Execute(cpuState);
+
+            Assert.AreEqual(pc, cpuState.GetMarkAddress(mark));
+        }
     }
 }

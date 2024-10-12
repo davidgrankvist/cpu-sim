@@ -25,6 +25,8 @@ jl mark
 jle mark
 jg mark
 jge mark
+mark:
+mixedCaseMarkWithSomeNumbers12151:
 ";
 
             var commands = new List<ICpuCommand>()
@@ -45,6 +47,8 @@ jge mark
                 new JumpCommand("mark", CompareResult.LessThanOrEqual),
                 new JumpCommand("mark", CompareResult.GreaterThan),
                 new JumpCommand("mark", CompareResult.GreaterThanOrEqual),
+                new MarkCommand("mark"),
+                new MarkCommand("mixedCaseMarkWithSomeNumbers12151"),
             };
 
             return (program, commands);
