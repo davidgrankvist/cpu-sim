@@ -1,5 +1,7 @@
-﻿using CpuSim.Lib.Simulation.Commands;
+﻿using CpuSim.Lib.Simulation;
+using CpuSim.Lib.Simulation.Commands;
 using CpuSim.Lib.Simulation.Commands.Arithmetic;
+using CpuSim.Lib.Simulation.Commands.ControlFlow;
 
 namespace CpuSim.Lib.Test.ExecutorTests
 {
@@ -42,6 +44,44 @@ namespace CpuSim.Lib.Test.ExecutorTests
             };
 
             return (program, resultAddress, expectedResult);
+        }
+
+        public static (IEnumerable<ICpuCommand> Program, CommandSpy ToSkip, CommandSpy ToRun) CreateForwardJumpProgram()
+        {
+            var toSkip  = new CommandSpy();
+            var toRun = new CommandSpy();
+
+            var r = 0;
+            var program = new List<ICpuCommand>()
+            {
+                new JumpCommand("end", CompareResult.Any),
+                toSkip,
+                new MarkCommand("end"),
+                toRun,
+            };
+
+            return (program, toSkip, toRun);
+        }
+
+        public static (IEnumerable<ICpuCommand> Program, CommandSpy ToRepeat, int ExpectedRepetitions) CreateIncrementLoopProgram()
+        {
+            var expectedRepetitions = 10;
+            var toRepeat = new CommandSpy();
+
+            var r1 = 0;
+            var r2 = 1;
+            var program = new List<ICpuCommand>()
+            {
+                new LoadCommand(r1, 0),
+                new LoadCommand(r2, expectedRepetitions),
+                new MarkCommand("loop"),
+                toRepeat,
+                new IncrementCommand(r1),
+                new CompareCommand(r1, r2),
+                new JumpCommand("loop", CompareResult.LessThan),
+            };
+
+            return (program, toRepeat, expectedRepetitions);
         }
     }
 }

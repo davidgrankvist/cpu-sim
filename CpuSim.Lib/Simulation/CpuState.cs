@@ -19,6 +19,7 @@ namespace CpuSim.Lib.Simulation
             registers = new int[numRegisters];
             memory = [];
             markToAddress = [];
+            compareResult = CompareResult.Any;
         }
 
         public void SetRegister(int register, int value)

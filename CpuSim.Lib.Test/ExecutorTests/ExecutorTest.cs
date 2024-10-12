@@ -18,6 +18,14 @@ namespace CpuSim.Lib.Test.ExecutorTests
             executor = new Executor(cpuState);
         }
 
+        private void RunProgram(IEnumerable<ICpuCommand> commands)
+        {
+            foreach (var command in commands)
+            {
+                executor.Execute(command);
+            }
+        }
+
         [TestMethod]
         public void ShouldCombineArithmetic()
         {
@@ -38,12 +46,27 @@ namespace CpuSim.Lib.Test.ExecutorTests
             Assert.AreEqual(expectedResult, cpuState.GetMemory(resultAddress));
         }
 
-        private void RunProgram(IEnumerable<ICpuCommand> commands)
+        [TestMethod]
+        public void ShouldForwardJump()
         {
-            foreach (var command in commands)
-            {
-                executor.Execute(command);
-            }
+            var (program, toSkip, toRun) = ExecutorTestDataHelper.CreateForwardJumpProgram();
+
+            executor.Load(program);
+            executor.ExecuteAll();
+
+            Assert.IsFalse(toSkip.DidExecute);
+            Assert.IsTrue(toRun.DidExecute);
+        }
+
+        [TestMethod]
+        public void ShouldLoopUntilLimit()
+        {
+            var (program, toRepeat, expectedRepetitions) = ExecutorTestDataHelper.CreateIncrementLoopProgram();
+
+            executor.Load(program);
+            executor.ExecuteAll();
+
+            Assert.AreEqual(expectedRepetitions, toRepeat.NumExecutions);
         }
     }
 }
