@@ -1,10 +1,10 @@
-﻿using CpuSim.App.Simulation.Commands;
-using CpuSim.App.Simulation.Commands.Arithmetic;
-using CpuSim.App.Simulation.Commands.ControlFlow;
+﻿using CpuSim.Lib.Simulation.Commands;
+using CpuSim.Lib.Simulation.Commands.Arithmetic;
+using CpuSim.Lib.Simulation.Commands.ControlFlow;
 
-namespace CpuSim.App.Simulation
+namespace CpuSim.Lib.Simulation
 {
-    internal class Interpreter
+    public class Interpreter
     {
         private readonly Executor executor;
 

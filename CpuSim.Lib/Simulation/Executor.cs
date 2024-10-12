@@ -1,8 +1,8 @@
-﻿using CpuSim.App.Simulation.Commands;
+﻿using CpuSim.Lib.Simulation.Commands;
 
-namespace CpuSim.App.Simulation
+namespace CpuSim.Lib.Simulation
 {
-    internal class Executor
+    public class Executor
     {
         private readonly CpuState cpuState;
 

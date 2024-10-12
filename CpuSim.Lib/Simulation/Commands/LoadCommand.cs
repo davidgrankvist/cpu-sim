@@ -1,4 +1,6 @@
-﻿namespace CpuSim.App.Simulation.Commands
+﻿using CpuSim.Lib.Simulation;
+
+namespace CpuSim.Lib.Simulation.Commands
 {
     internal class LoadCommand : ICpuCommand
     {

@@ -1,4 +1,4 @@
-﻿namespace CpuSim.App.Simulation.Commands.Arithmetic
+﻿namespace CpuSim.Lib.Simulation.Commands.Arithmetic
 {
     internal class DecrementCommand : ICpuCommand
     {

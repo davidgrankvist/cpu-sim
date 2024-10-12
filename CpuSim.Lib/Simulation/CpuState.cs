@@ -1,13 +1,8 @@
-﻿
+﻿using CpuSim.Lib.Simulation.Commands.ControlFlow;
 
-
-
-
-using CpuSim.App.Simulation.Commands.ControlFlow;
-
-namespace CpuSim.App.Simulation
+namespace CpuSim.Lib.Simulation
 {
-    internal class CpuState
+    public class CpuState
     {
         public void Load(int register, int value)
         {

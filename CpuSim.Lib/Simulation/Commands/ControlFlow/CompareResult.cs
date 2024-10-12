@@ -1,6 +1,6 @@
-﻿namespace CpuSim.App.Simulation.Commands.ControlFlow
+﻿namespace CpuSim.Lib.Simulation.Commands.ControlFlow
 {
-    internal enum CompareResult
+    public enum CompareResult
     {
         Any,
         Equal,

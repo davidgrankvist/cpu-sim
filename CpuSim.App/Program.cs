@@ -1,4 +1,4 @@
-﻿using CpuSim.App.Simulation;
+﻿using CpuSim.Lib.Simulation;
 
 namespace CpuSim.App
 {

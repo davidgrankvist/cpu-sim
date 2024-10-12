@@ -1,12 +1,12 @@
-﻿namespace CpuSim.App.Simulation.Commands.Arithmetic
+﻿namespace CpuSim.Lib.Simulation.Commands.Arithmetic
 {
-    internal class DivideCommand : ICpuCommand
+    internal class SubtractCommand : ICpuCommand
     {
         private readonly int register1;
 
         private readonly int register2;
 
-        public DivideCommand(int register1, int register2)
+        public SubtractCommand(int register1, int register2)
         {
             this.register1 = register1;
             this.register2 = register2;
