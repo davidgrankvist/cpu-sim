@@ -1,6 +1,6 @@
 ﻿namespace CpuSim.Lib.Simulation.Commands.Arithmetic
 {
-    internal class DivideCommand : ICpuCommand
+    public struct DivideCommand : ICpuCommand
     {
         private readonly int register1;
 

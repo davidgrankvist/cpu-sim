@@ -1,6 +1,6 @@
 ﻿namespace CpuSim.Lib.Simulation.Commands.Arithmetic
 {
-    internal class DecrementCommand : ICpuCommand
+    public struct DecrementCommand : ICpuCommand
     {
         private readonly int register;
 
@@ -8,6 +8,7 @@
         {
             this.register = register;
         }
+
         public void Execute(CpuState cpuState)
         {
             cpuState.Decrement(register);

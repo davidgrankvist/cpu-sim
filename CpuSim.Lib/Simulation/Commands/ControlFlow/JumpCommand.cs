@@ -1,6 +1,6 @@
 ﻿namespace CpuSim.Lib.Simulation.Commands.ControlFlow
 {
-    internal class JumpCommand : ICpuCommand
+    public struct JumpCommand : ICpuCommand
     {
         private readonly string marker;
         private readonly CompareResult compareResult;

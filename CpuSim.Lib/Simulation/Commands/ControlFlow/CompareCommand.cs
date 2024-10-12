@@ -1,9 +1,8 @@
 ﻿namespace CpuSim.Lib.Simulation.Commands.ControlFlow
 {
-    internal class CompareCommand : ICpuCommand
+    public struct CompareCommand : ICpuCommand
     {
         private readonly int register1;
-
 
         private readonly int register2;
 

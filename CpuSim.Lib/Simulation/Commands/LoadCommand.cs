@@ -1,8 +1,6 @@
-﻿using CpuSim.Lib.Simulation;
-
-namespace CpuSim.Lib.Simulation.Commands
+﻿namespace CpuSim.Lib.Simulation.Commands
 {
-    internal class LoadCommand : ICpuCommand
+    public struct LoadCommand : ICpuCommand
     {
         private readonly int register;
 

@@ -1,14 +1,15 @@
 ﻿using CpuSim.Lib.Simulation.Commands;
 using CpuSim.Lib.Simulation.Commands.Arithmetic;
 using CpuSim.Lib.Simulation.Commands.ControlFlow;
+using System.Globalization;
 
 namespace CpuSim.Lib.Simulation
 {
     public class Interpreter
     {
-        private readonly Executor executor;
+        private readonly IExecutor executor;
 
-        public Interpreter(Executor executor)
+        public Interpreter(IExecutor executor)
         {
             this.executor = executor;
         }
@@ -18,7 +19,12 @@ namespace CpuSim.Lib.Simulation
             string line;
             while ((line = input.ReadLine()) != null)
             {
-                var tokens = line.Trim().Split();
+                var tokens = Tokenize(line);
+                if (tokens.Length == 0)
+                {
+                    continue;
+                }
+
                 if (TryParse(tokens, out var command))
                 {
                     executor.Execute(command);
@@ -26,17 +32,30 @@ namespace CpuSim.Lib.Simulation
             }
         }
 
+        private static string[] Tokenize(string line)
+        {
+            return line
+                .Trim()
+                .Split()
+                .Where(x => !string.IsNullOrEmpty(x))
+                .ToArray();
+        }
+
         private bool TryParse(string[] tokens, out ICpuCommand command)
         {
             command = null;
 
-            if (tokens.Length >= 3)
+            if (tokens.Length == 3)
             {
                 command = ParseTwoArgCommand(tokens[0], tokens[1], tokens[2]);
             }
             else if (tokens.Length == 2)
             {
                 command = ParseOneArgCommand(tokens[0], tokens[1]);
+            }
+            else
+            {
+                throw new InvalidOperationException($"Unknown command {string.Join(' ')}");
             }
 
             return command != null;
@@ -101,10 +120,10 @@ namespace CpuSim.Lib.Simulation
                     command = new CompareCommand(ToRegisterIndex(arg1), ToRegisterIndex(arg2));
                     break;
                 case "ld":
-                    command = new LoadCommand(ToRegisterIndex(arg1), int.Parse(arg2));
+                    command = new LoadCommand(ToRegisterIndex(arg1), ParseInt(arg2));
                     break;
                 case "st":
-                    command = new StoreCommand(ToRegisterIndex(arg1), int.Parse(arg2));
+                    command = new StoreCommand(ToRegisterIndex(arg1), ParseInt(arg2));
                     break;
             }
 
@@ -118,6 +137,20 @@ namespace CpuSim.Lib.Simulation
                 throw new InvalidOperationException("Registers must consist of an r followed by a number (e.g. r0)");
             }
             return int.Parse(registerString.Substring(1));
+        }
+
+        private static int ParseInt(string str)
+        {
+            int result;
+            if (str.StartsWith("0x"))
+            {
+                result = int.Parse(str.Substring(2), NumberStyles.HexNumber);
+            }
+            else
+            {
+                result = int.Parse(str, NumberStyles.Integer);
+            }
+            return result;
         }
     }
 }

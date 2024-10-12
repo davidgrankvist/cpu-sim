@@ -1,6 +1,6 @@
 ﻿namespace CpuSim.Lib.Simulation.Commands.Arithmetic
 {
-    internal class IncrementCommand : ICpuCommand
+    public struct IncrementCommand : ICpuCommand
     {
         private readonly int register;
 

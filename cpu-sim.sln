@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CpuSim.App", "CpuSim.App\Cp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CpuSim.Lib", "CpuSim.Lib\CpuSim.Lib.csproj", "{A711D28B-3083-4347-A411-AD89453521DD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CpuSim.Lib.Test", "CpuSim.Lib.Test\CpuSim.Lib.Test.csproj", "{C37D42BB-8CD9-4696-AB1A-0F69131862C0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +26,9 @@ Global
 		{A711D28B-3083-4347-A411-AD89453521DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A711D28B-3083-4347-A411-AD89453521DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A711D28B-3083-4347-A411-AD89453521DD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C37D42BB-8CD9-4696-AB1A-0F69131862C0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C37D42BB-8CD9-4696-AB1A-0F69131862C0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C37D42BB-8CD9-4696-AB1A-0F69131862C0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C37D42BB-8CD9-4696-AB1A-0F69131862C0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

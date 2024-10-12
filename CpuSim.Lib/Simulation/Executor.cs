@@ -2,7 +2,7 @@
 
 namespace CpuSim.Lib.Simulation
 {
-    public class Executor
+    public class Executor : IExecutor
     {
         private readonly CpuState cpuState;
 

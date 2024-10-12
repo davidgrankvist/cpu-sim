@@ -1,6 +1,6 @@
 ﻿namespace CpuSim.Lib.Simulation.Commands.Arithmetic
 {
-    internal class MultiplyCommand : ICpuCommand
+    public struct MultiplyCommand : ICpuCommand
     {
         private readonly int register1;
 

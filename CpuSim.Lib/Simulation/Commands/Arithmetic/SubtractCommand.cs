@@ -1,6 +1,6 @@
 ﻿namespace CpuSim.Lib.Simulation.Commands.Arithmetic
 {
-    internal class SubtractCommand : ICpuCommand
+    public struct SubtractCommand : ICpuCommand
     {
         private readonly int register1;
 
