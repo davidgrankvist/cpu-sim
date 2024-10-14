@@ -2,7 +2,7 @@
 
 namespace CpuSim.Lib.Simulation.Devices
 {
-    public class ButtonDevice : IDevice
+    public class ButtonDevice : IInputDevice
     {
         private readonly int address;
         public bool IsPressed { get; set; }
@@ -27,6 +27,16 @@ namespace CpuSim.Lib.Simulation.Devices
             {
                 memory.Set(address, 0);
             }
+        }
+
+        public void ActiveKey(InputKey key)
+        {
+            IsPressed = true;
+        }
+
+        public void DeactiveKey(InputKey key)
+        {
+            IsPressed = false;
         }
     }
 }

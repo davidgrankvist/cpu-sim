@@ -1,5 +1,4 @@
-﻿using CpuSim.Lib.Simulation;
-using CpuSim.Lib.Simulation.CpuStates;
+﻿using CpuSim.App.Experiments;
 
 namespace CpuSim.App
 {
@@ -7,13 +6,15 @@ namespace CpuSim.App
     {
         public static void Main(string[] args)
         {
-            var cpuState = new CpuState(10);
-            var executor = new Executor(cpuState);
-            var interpreter = new Interpreter(executor, InterpreterExecutionMode.Interactive);
-
-            using (var stdin = Console.In)
+            if (args.Length >= 1 && args[0] == "interactive")
             {
-                interpreter.Run(stdin);
+                var experiment = new InteractiveInterpreterExperiment();
+                experiment.Run();
+            }
+            else
+            {
+                var experiment = new ButtonAndLedExperiment();
+                experiment.Run();
             }
         }
     }
