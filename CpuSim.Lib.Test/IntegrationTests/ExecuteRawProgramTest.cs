@@ -1,4 +1,6 @@
 ﻿using CpuSim.Lib.Simulation;
+using CpuSim.Lib.Simulation.CpuStates;
+using CpuSim.Lib.Simulation.Devices;
 using CpuSim.Lib.Test.Framework;
 
 namespace CpuSim.Lib.Test.IntegrationTests
@@ -10,12 +12,14 @@ namespace CpuSim.Lib.Test.IntegrationTests
         private Executor executor;
         private CpuState cpuState;
         private int numRegisters;
+        private MappedMemory mappedMemory;
 
         [TestInitialize]
         public void Initialize()
         {
             numRegisters = 10;
-            cpuState = new CpuState(numRegisters);
+            mappedMemory = new MappedMemory();
+            cpuState = new CpuState(numRegisters, mappedMemory);
             executor = new Executor(cpuState);
             interpreter = new Interpreter(executor);
         }
@@ -67,6 +71,25 @@ namespace CpuSim.Lib.Test.IntegrationTests
 
             Assert.AreEqual(1, cpuState.GetMemory(setup.DidFinishAddress));
             Assert.AreEqual(setup.ExpectedResult, cpuState.GetRegister(setup.ResultRegister));
+        }
+
+        [TestMethod]
+        public void ShouldEnableLedUsingButton()
+        {
+            var setup = IntegrationTestDataHelper.CreateCopyBetweenMemoryProgram();
+            var button = new ButtonDevice(setup.FromAddress);
+            var led = new LedDevice(setup.ToAddress);
+            mappedMemory.Map(setup.ToAddress);
+            mappedMemory.Map(setup.FromAddress);
+
+            Assert.IsFalse(led.IsOn);
+
+            button.IsPressed = true;
+            button.Update(mappedMemory);
+            interpreter.Run(setup.Program);
+            led.Update(mappedMemory);
+
+            Assert.IsTrue(led.IsOn);
         }
     }
 }

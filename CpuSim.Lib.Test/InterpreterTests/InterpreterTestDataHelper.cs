@@ -32,6 +32,7 @@ psh r1
 pop r1
 ret
 call mark
+lda r1 0x1337
 ";
 
             var commands = new List<ICpuCommand>()
@@ -58,6 +59,7 @@ call mark
                 new PopCommand(1),
                 new ReturnCommand(),
                 new CallCommand("mark"),
+                new LoadAddressCommand(1, 0x1337),
             };
 
             return (program, commands);

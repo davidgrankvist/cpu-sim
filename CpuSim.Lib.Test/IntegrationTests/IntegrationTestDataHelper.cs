@@ -215,5 +215,18 @@ end:
             }
             return Fib(n - 2) + Fib(n - 1);
         }
+
+        public static (string Program, int FromAddress, int ToAddress, int ExpectedResult) CreateCopyBetweenMemoryProgram()
+        {
+            var fromAddress = 0x1337;
+            var toAddress = 0x1338;
+            var expectedResult = 1;
+
+            var program = @"
+lda r1 0x1337
+st r1 0x1338
+";
+            return (program, fromAddress, toAddress, expectedResult);
+        }
     }
 }

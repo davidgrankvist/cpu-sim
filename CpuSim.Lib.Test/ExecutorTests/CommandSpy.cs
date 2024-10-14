@@ -1,5 +1,5 @@
-﻿using CpuSim.Lib.Simulation;
-using CpuSim.Lib.Simulation.Commands;
+﻿using CpuSim.Lib.Simulation.Commands;
+using CpuSim.Lib.Simulation.CpuStates;
 
 namespace CpuSim.Lib.Test.ExecutorTests
 {

@@ -1,4 +1,6 @@
-﻿namespace CpuSim.Lib.Simulation.Commands.ControlFlow
+﻿using CpuSim.Lib.Simulation.CpuStates;
+
+namespace CpuSim.Lib.Simulation.Commands.ControlFlow
 {
     public struct CallCommand : ICpuCommand
     {

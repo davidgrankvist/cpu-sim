@@ -1,7 +1,7 @@
-﻿using CpuSim.Lib.Simulation;
-using CpuSim.Lib.Simulation.Commands;
+﻿using CpuSim.Lib.Simulation.Commands;
 using CpuSim.Lib.Simulation.Commands.Arithmetic;
 using CpuSim.Lib.Simulation.Commands.ControlFlow;
+using CpuSim.Lib.Simulation.CpuStates;
 
 namespace CpuSim.Lib.Test
 {
@@ -273,6 +273,38 @@ namespace CpuSim.Lib.Test
             cmd.Execute(cpuState);
 
             Assert.AreEqual(pcRet, cpuState.GetProgramCounter());
+        }
+
+        [TestMethod]
+        public void ShouldLoadFromRegularAddress()
+        {
+            var r = 0;
+            var addr = 1337;
+            var value = 1234;
+            var cmd = new LoadAddressCommand(r, addr);
+            cpuState.SetMemory(addr, value);
+
+            cmd.Execute(cpuState);
+
+            Assert.AreEqual(value, cpuState.GetRegister(r));
+        }
+
+        [TestMethod]
+        public void ShouldLoadFromMappedAddress()
+        {
+            var mappedMemory = new MappedMemory();
+            cpuState = new CpuState(numRegisters, mappedMemory);
+
+            var r = 0;
+            var addr = 1337;
+            var value = 1234;
+            var cmd = new LoadAddressCommand(r, addr);
+            mappedMemory.Map(addr);
+            mappedMemory.Set(addr, value);
+
+            cmd.Execute(cpuState);
+
+            Assert.AreEqual(value, cpuState.GetRegister(r));
         }
     }
 }

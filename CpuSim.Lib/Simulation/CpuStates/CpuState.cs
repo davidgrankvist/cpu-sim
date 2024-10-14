@@ -1,6 +1,6 @@
 ﻿using CpuSim.Lib.Simulation.Commands.ControlFlow;
 
-namespace CpuSim.Lib.Simulation
+namespace CpuSim.Lib.Simulation.CpuStates
 {
     public class CpuState
     {
@@ -18,7 +18,9 @@ namespace CpuSim.Lib.Simulation
 
         private readonly Stack<int> returnStack;
 
-        public CpuState(int numRegisters)
+        private readonly MappedMemory mappedMemory;
+
+        public CpuState(int numRegisters, MappedMemory? mappedMemory = null)
         {
             registers = new int[numRegisters];
             memory = [];
@@ -26,6 +28,7 @@ namespace CpuSim.Lib.Simulation
             compareResult = CompareResult.Any;
             stack = [];
             returnStack = [];
+            this.mappedMemory = mappedMemory ?? new MappedMemory();
         }
 
         public void SetRegister(int register, int value)
@@ -40,12 +43,29 @@ namespace CpuSim.Lib.Simulation
 
         public void SetMemory(int address, int value)
         {
-            memory[address] = value;
+            if (mappedMemory.IsMapped(address))
+            {
+                mappedMemory.Set(address, value);
+            }
+            else
+            {
+                memory[address] = value;
+            }
         }
 
         public int GetMemory(int address)
         {
-            return memory[address];
+            int value;
+            if (mappedMemory.IsMapped(address))
+            {
+                value = mappedMemory.Get(address);
+            }
+            else
+            {
+                value = memory[address];
+            }
+
+            return value;
         }
 
         public void SetCompareResult(CompareResult compareResult)

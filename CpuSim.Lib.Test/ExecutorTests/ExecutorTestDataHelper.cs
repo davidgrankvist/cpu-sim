@@ -2,6 +2,7 @@
 using CpuSim.Lib.Simulation.Commands;
 using CpuSim.Lib.Simulation.Commands.Arithmetic;
 using CpuSim.Lib.Simulation.Commands.ControlFlow;
+using CpuSim.Lib.Simulation.CpuStates;
 
 namespace CpuSim.Lib.Test.ExecutorTests
 {
@@ -115,6 +116,21 @@ namespace CpuSim.Lib.Test.ExecutorTests
             };
 
             return (program, toSkip,  resultRegister, expectedResult);
+        }
+
+        public static (IEnumerable<ICpuCommand> Program, int ExpectedResult) CreateReadWriteMemoryCommand(int fromAddress, int toAddress)
+        {
+            var value = 4;
+            var r = 0;
+            var program = new List<ICpuCommand>()
+            {
+                new LoadCommand(r, value),
+                new StoreCommand(r, fromAddress),
+                new LoadAddressCommand(r, fromAddress),
+                new StoreCommand(r, toAddress),
+            };
+
+            return (program, value);
         }
     }
 }

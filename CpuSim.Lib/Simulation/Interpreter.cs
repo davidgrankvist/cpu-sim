@@ -237,6 +237,9 @@ namespace CpuSim.Lib.Simulation
                 case "st":
                     command = new StoreCommand(ToRegisterIndex(arg1), ParseInt(arg2));
                     break;
+                case "lda":
+                    command = new LoadAddressCommand(ToRegisterIndex(arg1), ParseInt(arg2));
+                    break;
             }
 
             return command;

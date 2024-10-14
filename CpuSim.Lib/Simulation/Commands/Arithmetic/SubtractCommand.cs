@@ -1,4 +1,6 @@
-﻿namespace CpuSim.Lib.Simulation.Commands.Arithmetic
+﻿using CpuSim.Lib.Simulation.CpuStates;
+
+namespace CpuSim.Lib.Simulation.Commands.Arithmetic
 {
     public struct SubtractCommand : ICpuCommand
     {

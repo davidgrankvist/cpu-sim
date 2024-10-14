@@ -1,5 +1,6 @@
 ﻿using CpuSim.Lib.Simulation.Commands;
 using CpuSim.Lib.Simulation.Commands.ControlFlow;
+using CpuSim.Lib.Simulation.CpuStates;
 
 namespace CpuSim.Lib.Simulation
 {

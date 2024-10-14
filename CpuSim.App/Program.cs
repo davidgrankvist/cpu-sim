@@ -1,4 +1,5 @@
 ﻿using CpuSim.Lib.Simulation;
+using CpuSim.Lib.Simulation.CpuStates;
 
 namespace CpuSim.App
 {

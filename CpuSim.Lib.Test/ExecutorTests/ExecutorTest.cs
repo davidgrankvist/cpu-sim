@@ -1,5 +1,6 @@
 ﻿using CpuSim.Lib.Simulation;
 using CpuSim.Lib.Simulation.Commands;
+using CpuSim.Lib.Simulation.CpuStates;
 
 namespace CpuSim.Lib.Test.ExecutorTests
 {
@@ -82,6 +83,36 @@ namespace CpuSim.Lib.Test.ExecutorTests
 
             Assert.IsTrue(!toSkip.DidExecute);
             Assert.AreEqual(expectedResult, cpuState.GetRegister(resultRegister));
+        }
+
+        [DataTestMethod]
+        [DataRow(false, false)]
+        [DataRow(true, false)]
+        [DataRow(false, true)]
+        [DataRow(true, true)]
+        public void ShouldWriteToOneAddressAndCopyToTheNext(bool fromAddressIsMapped, bool toAddressIsMapped)
+        {
+            var mappedMemory = new MappedMemory();
+            cpuState = new CpuState(numRegisters);
+            executor = new Executor(cpuState);
+            var fromAddress = 12;
+            var toAddress = 13;
+            var (program, expectedResult) = ExecutorTestDataHelper.CreateReadWriteMemoryCommand(fromAddress, toAddress);
+
+            if (fromAddressIsMapped)
+            {
+                mappedMemory.Map(fromAddress);
+            }
+            if (toAddressIsMapped)
+            {
+                mappedMemory.Map(toAddress);
+            }
+
+            executor.Load(program);
+            executor.ExecuteAll();
+
+            Assert.AreEqual(expectedResult, cpuState.GetMemory(fromAddress));
+            Assert.AreEqual(expectedResult, cpuState.GetMemory(toAddress));
         }
     }
 }
