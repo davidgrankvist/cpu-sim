@@ -93,7 +93,7 @@ namespace CpuSim.Lib.Test.ExecutorTests
         public void ShouldWriteToOneAddressAndCopyToTheNext(bool fromAddressIsMapped, bool toAddressIsMapped)
         {
             var mappedMemory = new MappedMemory();
-            cpuState = new CpuState(numRegisters);
+            cpuState = new CpuState(numRegisters, mappedMemory);
             executor = new Executor(cpuState);
             var fromAddress = 12;
             var toAddress = 13;
@@ -113,6 +113,14 @@ namespace CpuSim.Lib.Test.ExecutorTests
 
             Assert.AreEqual(expectedResult, cpuState.GetMemory(fromAddress));
             Assert.AreEqual(expectedResult, cpuState.GetMemory(toAddress));
+            if (fromAddressIsMapped)
+            {
+                Assert.AreEqual(expectedResult, mappedMemory.Get(fromAddress));
+            }
+            if (toAddressIsMapped)
+            {
+                Assert.AreEqual(expectedResult, mappedMemory.Get(toAddress));
+            }
         }
     }
 }
